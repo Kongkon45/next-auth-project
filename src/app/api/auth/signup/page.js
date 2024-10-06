@@ -1,17 +1,21 @@
 "use client"
-import React from 'react';
+import { imageUpload } from '@/utils/ImageUpload';
+import React, {useState} from 'react';
 
-const page =  () => {
+const SingUpPage =  () => {
+    const [file, setFile] = useState("");
 
     const handleSubmit = async (e)=>{
         e.preventDefault()
+        const imageURL = await imageUpload(file[0])
         const formData = {
             name : e.target.name.value,
             email : e.target.email.value,
             password : e.target.password.value,
             type : e.target.type.value,
-            image : e.target.image.value
+            image : imageURL
         }
+        console.log(formData)
 
         const res = await fetch('http://localhost:3000/api/auth/signup/new-user', {
             body : JSON.stringify(formData),
@@ -42,7 +46,7 @@ const page =  () => {
                 </div>
                 <div> 
                     <label className='text-lg font-bold'>Image</label> <br/>
-                    <input className='w-full border-2 rounded-lg py-1 px-2' name="image" type="text" placeholder='Enter your Image url ...'/>
+                    <input onChange={(e)=>setFile(e.target.files)} className='w-full border-2 rounded-lg py-1 px-2' name="image" type="file" placeholder='Enter your Image url ...' />
                 </div>
                 <div> 
                     <label className='text-lg font-bold'>Type</label> <br/>
@@ -60,4 +64,4 @@ const page =  () => {
     );
 };
 
-export default page;
+export default SingUpPage;

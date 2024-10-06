@@ -17,17 +17,17 @@ const links = [
     route: "About",
   },
   {
-    id: 2,
+    id: 3,
     slug: "/dashboard",
     route: "Dashboard",
   },
   {
-    id: 3,
+    id: 4,
     slug: "/blog",
     route: "Blog",
   },
   {
-    id: 4,
+    id: 5,
     slug: "/contact",
     route: "Contact",
   },
