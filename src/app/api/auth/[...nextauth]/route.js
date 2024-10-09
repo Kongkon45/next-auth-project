@@ -1,11 +1,14 @@
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth from "next-auth/next";
 import connectDB from "@/components/lib/connectDB";
+import GoogleProvider from "next-auth/providers/google";
+import GitHubProvider from "next-auth/providers/github";
 
 const handler = NextAuth({
+  secret : process.env.NEXT_PUBLIC_SECRET_KEY,
   session: {
     strategy: "jwt",
-    // maxAge : 30 * 24 * 60 * 60
+    maxAge : 30 * 24 * 60 * 60
   },
   providers: [
     CredentialsProvider({
@@ -43,6 +46,14 @@ const handler = NextAuth({
         return null;
       },
     }),
+    GoogleProvider({
+      clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      clientSecret: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_SECRET
+    }),
+    GitHubProvider({
+      clientId: process.env.NEXT_PUBLIC_GITHUB_ID,
+      clientSecret: process.env.NEXT_PUBLIC_GITHUB_SECRET
+    })
   ],
   callbacks: {
     async jwt({ token, account, user }) {
