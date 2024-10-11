@@ -1,10 +1,12 @@
 "use client";
 import { imageUpload } from "@/utils/ImageUpload";
+import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
 
 const SingUpPage = () => {
+  const router = useRouter();
   const [file, setFile] = useState("");
   const [showPassword, setShowPassword] = useState(false);
 
@@ -29,6 +31,7 @@ const SingUpPage = () => {
       method: "POST",
     });
     e.target.reset();
+    router.push('/')
     console.log(res);
   };
   return (
