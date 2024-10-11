@@ -3,6 +3,7 @@ import NextAuth from "next-auth/next";
 import connectDB from "@/components/lib/connectDB";
 import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
+import bcrypt from 'bcrypt'; 
 
 const handler = NextAuth({
   secret : process.env.NEXT_PUBLIC_SECRET_KEY,
@@ -28,22 +29,40 @@ const handler = NextAuth({
       },
       async authorize(credentials) {
         const { email, password } = credentials;
-        if (!credentials) {
-          return null;
+        // if (!credentials) {
+        //   return null;
+        // }
+        if(!email || !password){
+          throw new Error("Missing email or password")
         }
-        if (email) {
-          // const currentUser = users?.find((user)=> user?.email === email)
-          const db = await connectDB();
-          const currentUser = await db.collection('users-info').findOne({email});
-          console.log(currentUser);
-          if (currentUser) {
-            if (currentUser?.password === password) {
-              return currentUser;
-            }
-          }
-        }
+        const db = await connectDB();
+        const currentUser = await db.collection('users-info').findOne({email})
 
-        return null;
+        if(!currentUser){
+          throw new Error("No user found with this email");
+        }
+        const isValidPassword = await bcrypt.compare(password, currentUser.password);
+        if(!isValidPassword){
+          throw new Error("Invalid Password")
+        }
+        return{
+          id : currentUser._id,
+          name : currentUser.name,
+          email : currentUser.email,
+          image : currentUser.image,
+          type : currentUser.type
+        }
+        // if (email) {
+        //   const db = await connectDB();
+        //   const currentUser = await db.collection('users-info').findOne({email});
+        //   console.log(currentUser);
+        //   if (currentUser) {
+        //     if (currentUser?.password === password) {
+        //       return currentUser;
+        //     }
+        //   }
+        // }
+
       },
     }),
     GoogleProvider({
