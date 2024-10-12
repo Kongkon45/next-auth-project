@@ -32,6 +32,7 @@ const SingUpPage = () => {
       method: "POST",
     });
     console.log({res})
+    console.log(process.env.NEXT_PUBLIC_API_URL);
     e.target.reset();
     router.push('/')
     console.log(res);
