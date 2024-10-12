@@ -23,13 +23,15 @@ const SingUpPage = () => {
     console.log(formData);
 
     // const res = await fetch("http://localhost:3000/api/auth/signup/new-user", {
-    const res = await fetch("https://next-auth-project-five.vercel.app/api/auth/signup/new-user", {
+    // const res = await fetch("https://next-auth-project-five.vercel.app/api/auth/signup/new-user", {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/auth/signup/new-user`, {
       body: JSON.stringify(formData),
       headers: {
         "content-type": "application/json",
       },
       method: "POST",
     });
+    console.log({res})
     e.target.reset();
     router.push('/')
     console.log(res);
